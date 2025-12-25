@@ -1,0 +1,11 @@
+id|isbn|title|author
+B1|9780135166307|Effective Java|Joshua Bloch
+B2|9780132350884|Clean Code|Robert C. Martin
+B4|1231231231|abcd|aaa
+B5|1231231232|abcd|aaa
+B6|1231231233|abcd|add
+B7|1231231234|aasdff|asdf
+B8|11|222|333
+B9|333|3333|3333
+B10|ISBN2342341234|Somudrer kinara|Sohel Khan
+B11|ISBN13245234|Aramdayok BSC|Jubair

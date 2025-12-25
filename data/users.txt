@@ -1,0 +1,4 @@
+id|name|password|role
+U1|Alice Rahman|pass123|STUDENT
+U2|Bob Hasan|admin123|STAFF
+U3|Charlie Khan|stud456|STUDENT

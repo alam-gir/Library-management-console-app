@@ -1,0 +1,3 @@
+id|studentID|name|department|email
+S1|2023CSE045|Alice Rahman|CSE|alice@uni.edu
+S2|2023EEE012|Tanvir Hasan|EEE|tanvir@uni.edu

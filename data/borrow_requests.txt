@@ -1,0 +1,2 @@
+id|studentId|copyId|status|requestDate
+R1|U1|C1|APPROVED|2025-01-10

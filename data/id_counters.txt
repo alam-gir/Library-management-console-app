@@ -1,0 +1,6 @@
+entity|lastNumber
+USER|3
+BOOK|11
+BOOK_COPY|5
+REQUEST|1
+NOTIFICATION|2
