@@ -29,11 +29,11 @@ public class StudentService {
         return repository.findByStudentID(studentId);
     }
 
-    public List<Student> searchStudents(String field, String keyword, int page, int size) {
-        return repository.search(field, keyword, page, size);
+    public int countSearch(String keyword) {
+        return repository.countSearch(keyword);
     }
 
-    public int countSearch(String field, String keyword) {
-        return repository.countSearch(field, keyword);
+    public List<Student> searchStudents(String keyword, int page, int size) {
+        return repository.search(keyword, page, size);
     }
 }

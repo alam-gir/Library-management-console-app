@@ -1,17 +1,21 @@
 package repository;
 
 import model.Student;
+import model.User;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StudentRepository {
 
     private final String FILE_PATH = "data/students.txt";
-    private final FileRepository fileRepository;
+    private final FileRepository fileRepository = new FileRepository();
+    private final UserRepository userRepository = new UserRepository();
 
-    public StudentRepository() {
-        this.fileRepository = new FileRepository();
+    public List<Student> findAll() {
+        return fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .toList();
     }
 
     public List<Student> findPage(int page, int size) {
@@ -58,52 +62,34 @@ public class StudentRepository {
         return null;
     }
 
-    public List<Student> search(String field, String keyword, int page, int size) {
-
-        List<Student> matched = filter(field, keyword);
-        return paginate(matched, page, size);
+    public List<Student> search(String keyword, int page, int size) {
+        return findAll().stream()
+                .filter(s -> s.getName().toLowerCase().contains(keyword.toLowerCase()) ||
+                        s.getStudentID().toLowerCase().contains(keyword.toLowerCase()) ||
+                        (s.getDepartment() != null && s.getDepartment().toLowerCase().contains(keyword.toLowerCase())))
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
     }
 
-    public int countSearch(String field, String keyword) {
-        return filter(field, keyword).size();
-    }
-
-    private List<Student> filter(String field, String keyword) {
-
-        String key = keyword.toLowerCase();
-
-        return fileRepository.readAll(FILE_PATH).stream()
-                .map(this::map)
-                .filter(s -> {
-                    if (field.equals("NAME"))
-                        return s.getName().toLowerCase().contains(key);
-                    if (field.equals("STUDENT_ID"))
-                        return s.getStudentID().toLowerCase().contains(key);
-                    if (field.equals("DEPARTMENT"))
-                        return s.getDepartment().toLowerCase().contains(key);
-                    return false;
-                })
-                .collect(Collectors.toList());
-    }
-
-    private List<Student> paginate(List<Student> list, int page, int size) {
-
-        int start = (page - 1) * size;
-        int end = Math.min(start + size, list.size());
-
-        if (start >= list.size())
-            return new ArrayList<>();
-
-        return list.subList(start, end);
+    public int countSearch(String keyword) {
+        return (int) findAll().stream()
+                .filter(s -> s.getName().toLowerCase().contains(keyword.toLowerCase()) ||
+                        s.getStudentID().toLowerCase().contains(keyword.toLowerCase()) ||
+                        (s.getDepartment() != null && s.getDepartment().toLowerCase().contains(keyword.toLowerCase())))
+                .count();
     }
 
     private Student map(String row) {
 
         String[] p = row.split("\\|");
+        User user = userRepository.findById(p[1]);
 
         Student s = new Student();
         s.setId(p[0]);
         s.setUserId(p[1]);
+        s.setName(user.getName());
+        s.setPassword(user.getPassword());
         s.setStudentID(p[2]);
         s.setDepartment(p[3]);
         s.setEmail(p[4]);
