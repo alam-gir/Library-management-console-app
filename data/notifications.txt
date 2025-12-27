@@ -5,3 +5,8 @@ N3|*|STAFF|New borrow request received|true|2025-01-23T09:12
 N4|*|STAFF|4 pending requests|true|2025-01-22T14:30
 N5|S4|STUDENT|Book B2 is ready for pickup|false|2025-01-23T08:00
 N6|*|STAFF|Overdue return detected (Copy C29)|true|2025-01-23T11:20
+X1|S1|STUDENT|No available copy for this book right now.|false|2025-12-27T22:16:45.983966400
+X2|*|STAFF|New borrow request from Student: S1 for BookID: B1|true|2025-12-27T22:39:34.816088200
+X3|S1|STUDENT|Borrow request submitted. Waiting approval.|false|2025-12-27T22:39:34.832653600
+X4|S1|STUDENT|Borrow request approved — Book is ready to collect.|false|2025-12-27T22:54:26.156067400
+X5|*|STAFF|Request X1 approved for student S1|true|2025-12-27T22:54:26.176090100

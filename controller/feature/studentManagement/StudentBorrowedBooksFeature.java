@@ -1,10 +1,11 @@
 package controller.feature.studentManagement;
 
 import service.BorrowRequestService;
-import service.BorrowedBookView;
 import util.*;
 
 import java.util.List;
+
+import model.BorrowedBookView;
 
 public class StudentBorrowedBooksFeature {
 

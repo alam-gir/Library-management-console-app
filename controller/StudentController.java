@@ -1,70 +1,66 @@
-// controller/StudentController.java
 package controller;
 
 import model.Student;
-import service.BookService;
-import service.BorrowRequestService;
 import service.NotificationService;
-import service.StudentService;
-import util.DisplayHelper;
-import util.InputHelper;
-import util.MenuRenderer;
-import util.ScreenUtil;
-
-
+import util.*;
 import controller.feature.notification.StudentNotificationFeature;
+import controller.student.feature.BookExploreFeature;
+import controller.student.feature.BorrowedBooksFeature;
+import controller.student.feature.RequestHistoryFeature;
 
 public class StudentController {
 
     private final Student student;
-    private final BookService bookService;
-    private final BorrowRequestService requestService;
-    private final StudentService studentService;
-    private final NotificationService notificationService;
+    private final NotificationService notificationService = new NotificationService();
 
     public StudentController(Student student) {
         this.student = student;
-        this.bookService = new BookService();
-        this.requestService = new BorrowRequestService();
-        this.studentService = new StudentService();
-        this.notificationService = new NotificationService();
     }
 
     public void start() {
 
         while (true) {
+
             ScreenUtil.clear();
-            DisplayHelper.printHeader("Student Dashboard");
-            DisplayHelper.info("Name: " + student.getName());
-            DisplayHelper.info("Department: " + student.getDepartment());
 
+            int unread = notificationService.unreadForStudent(student.getId());
 
-            MenuRenderer.show(
-                    "Student Menu",
-                    "View Books",
-                    "Request Book",
-                    "My Requests",
-                    "Notifications",
+            DisplayHelper.printHeader(" STUDENT DASHBOARD - " + student.getName());
+            DisplayHelper.emptyLine();
+
+            // Dashboard-style summary (optional & clean)
+            System.out.println("Welcome Back, " + student.getName());
+            System.out.println("   Student ID : " + student.getStudentID());
+            System.out.println("   Department : " + student.getDepartment());
+            DisplayHelper.emptyLine();
+
+            String[] menu = {
+                    "Explore Books", // instead of Search Books
+                    "My Borrowed Books",
+                    "Request History",
+                    unread > 0 ? "Notifications (" + unread + ")" : "Notifications",
                     "Logout"
-            );
+            };
 
-            int choice = InputHelper.readInt("Choose option", 1, 5);
+            MenuRenderer.show("Select an option", menu);
+
+            int choice = InputHelper.readInt("Choose", 1, menu.length);
 
             switch (choice) {
-                case 1:
-                    // viewBooks();
-                    break;
-                case 2:
-                    // requestBook();
-                    break;
-                case 3:
-                    // viewRequests();
-                    break;
-                case 4:
-                    new StudentNotificationFeature(student.getId()).start();
-                    break;
-                case 5:
+
+                case 1 -> new BookExploreFeature(student).start();
+
+                case 2 -> new BorrowedBooksFeature(student).start();
+
+                case 3 -> new RequestHistoryFeature(student).start();
+
+                case 4 -> new StudentNotificationFeature(student.getId()).start();
+
+                case 5 -> {
+                    DisplayHelper.info("Logging out...");
+                    ScreenUtil.pause();
                     return;
+                }
             }
         }
     }

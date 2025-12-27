@@ -25,7 +25,6 @@ public class BorrowRequestRepository {
         return row == null ? null : map(row);
     }
 
-    
     public List<BorrowRequest> findByStudentId(String studentId) {
         List<BorrowRequest> requests = new ArrayList<>();
         for (String row : fileRepository.readAll(FILE_PATH)) {
@@ -39,34 +38,77 @@ public class BorrowRequestRepository {
 
     public List<BorrowRequest> findAll() {
         List<BorrowRequest> list = new ArrayList<>();
-        for(String row:fileRepository.readAll(FILE_PATH)) list.add(map(row));
+        for (String row : fileRepository.readAll(FILE_PATH))
+            list.add(map(row));
         return list;
     }
 
     // return only requests with given status (paged)
-    public List<BorrowRequest> findByStatusPaged(RequestStatus status, int page, int size){
+    public List<BorrowRequest> findByStatusPaged(RequestStatus status, int page, int size) {
         List<BorrowRequest> filtered = findByStatus(status);
-        int start=(page-1)*size, end=Math.min(start+size, filtered.size());
-        return start>=filtered.size()?new ArrayList<>():filtered.subList(start,end);
+        int start = (page - 1) * size, end = Math.min(start + size, filtered.size());
+        return start >= filtered.size() ? new ArrayList<>() : filtered.subList(start, end);
     }
 
-    public int countByStatus(RequestStatus status){
-        int c=0;
-        for(BorrowRequest r:findAll()) if(r.getStatus()==status) c++;
+    public int countByStudentAndStatus(String studentId, RequestStatus status) {
+        return (int) fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(r -> r.getStudentId().equals(studentId) &&
+                        r.getStatus() == status)
+                .count();
+    }
+
+    public int countByStatus(RequestStatus status) {
+        int c = 0;
+        for (BorrowRequest r : findAll())
+            if (r.getStatus() == status)
+                c++;
         return c;
     }
 
-    public List<BorrowRequest> findByStatus(RequestStatus status){
-        List<BorrowRequest> list=new ArrayList<>();
-        for(BorrowRequest r:findAll()) if(r.getStatus()==status) list.add(r);
+    public List<BorrowRequest> findByStatus(RequestStatus status) {
+        List<BorrowRequest> list = new ArrayList<>();
+        for (BorrowRequest r : findAll())
+            if (r.getStatus() == status)
+                list.add(r);
         return list;
     }
 
+    public List<BorrowRequest> findPagedByStudent(String studentId, RequestStatus status, int page, int size) {
+        int skip = (page - 1) * size;
+
+        return fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(r -> r.getStudentId().equals(studentId) &&
+                        r.getStatus() == status)
+                .skip(skip)
+                .limit(size)
+                .toList();
+    }
+
+    public int countAllStudentRequests(String studentId) {
+        return (int) fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(r -> r.getStudentId().equals(studentId))
+                .count();
+    }
+
+    public List<BorrowRequest> findPagedAll(String studentId, int page, int size) {
+        int skip = (page - 1) * size;
+
+        return fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(r -> r.getStudentId().equals(studentId))
+                .skip(skip)
+                .limit(size)
+                .toList();
+    }
+
     public BorrowRequest findActiveByCopyId(String copyId) {
-        for (BorrowRequest r:findAll()){
-            if(r.getCopyId().equals(copyId) &&
-               (r.getStatus()==RequestStatus.CHECKED_OUT || r.getStatus()==RequestStatus.APPROVED))
-               return r;
+        for (BorrowRequest r : findAll()) {
+            if (r.getCopyId().equals(copyId) &&
+                    (r.getStatus() == RequestStatus.CHECKED_OUT || r.getStatus() == RequestStatus.APPROVED))
+                return r;
         }
         return null;
     }
@@ -75,23 +117,23 @@ public class BorrowRequestRepository {
         fileRepository.updateById(FILE_PATH, request.getId(), toRecord(request));
     }
 
-    private BorrowRequest map(String row){
-        String[] p=row.split("\\|");
-        BorrowRequest r=new BorrowRequest();
+    private BorrowRequest map(String row) {
+        String[] p = row.split("\\|");
+        BorrowRequest r = new BorrowRequest();
 
         r.setId(p[0]);
         r.setStudentId(p[1]);
         r.setCopyId(p[2]);
         r.setStatus(RequestStatus.valueOf(p[3]));
         r.setRequestDate(LocalDate.parse(p[4]));
-        r.setDueDate(p.length>5 && !p[5].isEmpty()?LocalDate.parse(p[5]):null);
+        r.setDueDate(p.length > 5 && !p[5].isEmpty() ? LocalDate.parse(p[5]) : null);
 
         return r;
     }
 
-    private String toRecord(BorrowRequest r){
-        return r.getId()+"|"+r.getStudentId()+"|"+r.getCopyId()+"|"+
-                r.getStatus()+"|"+r.getRequestDate()+"|"+
-                (r.getDueDate()==null?"":r.getDueDate());
+    private String toRecord(BorrowRequest r) {
+        return r.getId() + "|" + r.getStudentId() + "|" + r.getCopyId() + "|" +
+                r.getStatus() + "|" + r.getRequestDate() + "|" +
+                (r.getDueDate() == null ? "" : r.getDueDate());
     }
 }

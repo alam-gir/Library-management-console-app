@@ -50,12 +50,27 @@ public class BookCopyRepository {
                 .count();
     }
 
-    // ========================
-    // NEW -> find by ID
-    // ========================
+    public int countByBookAndStatus(String bookId, BookStatus status) {
+        return (int) fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(c -> c.getBookId().equals(bookId) &&
+                        c.getStatus() == status)
+                .count();
+    }
+
+    // find by ID
     public BookCopy findById(String copyId) {
         String row = fileRepository.readById(FILE_PATH, copyId);
         return row == null ? null : map(row);
+    }
+
+    public BookCopy findFirstAvailableCopy(String bookId) {
+        return fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(c -> c.getBookId().equals(bookId) &&
+                        c.getStatus() == BookStatus.AVAILABLE)
+                .findFirst()
+                .orElse(null);
     }
 
     // Save new copy
@@ -68,16 +83,26 @@ public class BookCopyRepository {
         fileRepository.deleteById(FILE_PATH, copyId);
     }
 
-    // ========================
-    // NEW -> update an existing record
-    // ========================
+    // update an existing record
     public void update(BookCopy copy) {
         fileRepository.updateById(FILE_PATH, copy.getId(), toRow(copy));
     }
 
-    // ------------------------
+    // update status
+    public void updateStatus(String copyId, BookStatus status) {
+        List<String> rows = fileRepository.readAll(FILE_PATH);
+
+        for (String row : rows) {
+            if (row.startsWith(copyId + "|")) {
+                BookCopy copy = map(row);
+                copy.setStatus(status);
+                fileRepository.updateById(FILE_PATH, copyId, toRow(copy));
+                return;
+            }
+        }
+    }
+
     // Internal mapping helpers
-    // ------------------------
     private BookCopy map(String row) {
         String[] p = row.split("\\|");
 

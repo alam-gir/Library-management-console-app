@@ -1,6 +1,8 @@
 package service;
 
 import model.Book;
+import model.enums.BookStatus;
+import repository.BookCopyRepository;
 import repository.BookRepository;
 import util.IdGenerator;
 import util.InputHelper;
@@ -9,11 +11,8 @@ import java.util.List;
 
 public class BookService {
 
-    private final BookRepository repository;
-
-    public BookService() {
-        this.repository = new BookRepository();
-    }
+    private final BookRepository repository = new BookRepository();
+    private final BookCopyRepository copyRepository = new BookCopyRepository();
 
     public List<Book> getBooks(int page, int size) {
         return repository.findPage(page, size);
@@ -75,5 +74,70 @@ public class BookService {
 
     public int countSearchResults(String field, String keyword) {
         return repository.countSearch(field, keyword);
+    }
+
+    // for student panel
+    public List<Book> getStudentBooks(int page, int size) {
+        return repository.findAll().stream()
+                .filter(b -> copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
+    }
+
+    public int countStudentBooks() {
+        return (int) repository.findAll().stream()
+                .filter(b -> copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .count();
+    }
+
+    public List<Book> searchStudentBooks(String keyword, int page, int size) {
+        return repository.findAll().stream()
+                .filter(b -> (b.getTitle().toLowerCase().contains(keyword.toLowerCase()) ||
+                        b.getAuthor().toLowerCase().contains(keyword.toLowerCase()) ||
+                        b.getIsbn().toLowerCase().contains(keyword.toLowerCase()))
+                        &&
+                        copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
+    }
+
+    // return only books that have available copies for student view
+    public int getStudentBookCount() {
+        return (int) repository.findAll().stream()
+                .filter(b -> copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .count();
+    }
+
+    public List<Book> getBooksForStudents(int page, int size) {
+        return repository.findAll().stream()
+                .filter(b -> copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
+    }
+
+    // search books but only if at least 1 available copy
+    public List<Book> searchBooksForStudents(String keyword, int page, int size) {
+        return repository.findAll().stream()
+                .filter(b -> (b.getTitle().toLowerCase().contains(keyword.toLowerCase()) ||
+                        b.getAuthor().toLowerCase().contains(keyword.toLowerCase()) ||
+                        b.getIsbn().toLowerCase().contains(keyword.toLowerCase()))
+                        &&
+                        copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
+    }
+
+    public int countSearchStudentBooks(String keyword) {
+        return (int) repository.findAll().stream()
+                .filter(b -> (b.getTitle().toLowerCase().contains(keyword.toLowerCase()) ||
+                        b.getAuthor().toLowerCase().contains(keyword.toLowerCase()) ||
+                        b.getIsbn().toLowerCase().contains(keyword.toLowerCase()))
+                        &&
+                        copyRepository.countByBookAndStatus(b.getId(), BookStatus.AVAILABLE) > 0)
+                .count();
     }
 }

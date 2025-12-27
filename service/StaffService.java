@@ -15,19 +15,21 @@ public class StaffService {
     private final BookCopyRepository copyRepo;
     private final NotificationService notify;
 
-    public StaffService(){
+    public StaffService() {
         this.requestRepo = new BorrowRequestRepository();
         this.copyRepo = new BookCopyRepository();
         this.notify = new NotificationService();
     }
 
-    public boolean approve(String requestId){
+    public boolean approve(String requestId) {
 
-        BorrowRequest r=requestRepo.findById(requestId);
-        if(r==null || r.getStatus()!= RequestStatus.PENDING) return false;
+        BorrowRequest r = requestRepo.findById(requestId);
+        if (r == null || r.getStatus() != RequestStatus.PENDING)
+            return false;
 
-        BookCopy cp=copyRepo.findById(r.getCopyId());
-        if(cp==null || cp.getStatus()!=BookStatus.AVAILABLE) return false;
+        BookCopy cp = copyRepo.findById(r.getCopyId());
+        if (cp == null || cp.getStatus() != BookStatus.REQUESTED)
+            return false;
 
         cp.setStatus(BookStatus.READY_FOR_PICKUP);
         copyRepo.update(cp);
@@ -35,28 +37,35 @@ public class StaffService {
         r.setStatus(RequestStatus.APPROVED);
         requestRepo.update(r);
 
-        notify.notifyStudent(r.getStudentId(),"Request Approved — Collect from library.");
+        notify.notifyStudent(r.getStudentId(),
+                "Book is ready to collect.");
+
+        notify.notifyStaff("Request " + requestId + " approved for student " + r.getStudentId());
+
         return true;
     }
 
-    public boolean reject(String requestId){
-        BorrowRequest r=requestRepo.findById(requestId);
-        if(r==null || r.getStatus()!=RequestStatus.PENDING) return false;
+    public boolean reject(String requestId) {
+        BorrowRequest r = requestRepo.findById(requestId);
+        if (r == null || r.getStatus() != RequestStatus.PENDING)
+            return false;
 
         r.setStatus(RequestStatus.REJECTED);
         requestRepo.update(r);
 
-        notify.notifyStudent(r.getStudentId(),"Your borrow request was rejected.");
+        notify.notifyStudent(r.getStudentId(), "Borrow request was rejected.");
         return true;
     }
 
-    public boolean checkout(String requestId){
+    public boolean checkout(String requestId) {
 
-        BorrowRequest r=requestRepo.findById(requestId);
-        if(r==null || r.getStatus()!=RequestStatus.APPROVED) return false;
+        BorrowRequest r = requestRepo.findById(requestId);
+        if (r == null || r.getStatus() != RequestStatus.APPROVED)
+            return false;
 
-        BookCopy cp=copyRepo.findById(r.getCopyId());
-        if(cp==null || cp.getStatus()!=BookStatus.READY_FOR_PICKUP) return false;
+        BookCopy cp = copyRepo.findById(r.getCopyId());
+        if (cp == null || cp.getStatus() != BookStatus.READY_FOR_PICKUP)
+            return false;
 
         cp.setStatus(BookStatus.BORROWED);
         copyRepo.update(cp);
@@ -65,22 +74,24 @@ public class StaffService {
         r.setDueDate(LocalDate.now().plusDays(14));
         requestRepo.update(r);
 
-        notify.notifyStudent(r.getStudentId(),"Book borrowed. Due date: "+r.getDueDate());
+        notify.notifyStudent(r.getStudentId(), "Book borrowed. Due date: " + r.getDueDate());
         return true;
     }
 
-    public boolean returnBook(String copyId){
+    public boolean returnBook(String copyId) {
 
-        BookCopy cp=copyRepo.findById(copyId);
-        if(cp==null || cp.getStatus()!=BookStatus.BORROWED) return false;
+        BookCopy cp = copyRepo.findById(copyId);
+        if (cp == null || cp.getStatus() != BookStatus.BORROWED)
+            return false;
 
-        BorrowRequest r=requestRepo.findActiveByCopyId(copyId);
-        if(r==null) return false;
+        BorrowRequest r = requestRepo.findActiveByCopyId(copyId);
+        if (r == null)
+            return false;
 
         cp.setStatus(BookStatus.AVAILABLE);
         copyRepo.update(cp);
 
-        notify.notifyStudent(r.getStudentId(),"Book returned successfully.");
+        notify.notifyStudent(r.getStudentId(), "Book returned successfully.");
         return true;
     }
 }
