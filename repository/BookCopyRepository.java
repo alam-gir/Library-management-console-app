@@ -18,9 +18,9 @@ public class BookCopyRepository {
     // Get all copies of a book
     public List<BookCopy> findByBookId(String bookId) {
         List<BookCopy> result = new ArrayList<>();
-        for(String row : fileRepository.readAll(FILE_PATH)) {
+        for (String row : fileRepository.readAll(FILE_PATH)) {
             BookCopy c = map(row);
-            if(c.getBookId().equals(bookId)) {
+            if (c.getBookId().equals(bookId)) {
                 result.add(c);
             }
         }
@@ -30,10 +30,24 @@ public class BookCopyRepository {
     // Count available copies only
     public int countAvailable(String bookId) {
         int count = 0;
-        for(BookCopy c : findByBookId(bookId)) {
-            if(c.getStatus() == BookStatus.AVAILABLE) count++;
+        for (BookCopy c : findByBookId(bookId)) {
+            if (c.getStatus() == BookStatus.AVAILABLE)
+                count++;
         }
         return count;
+    }
+
+    // count all copies available in library
+    public int countAll() {
+        return fileRepository.readAll(FILE_PATH).size();
+    }
+
+    // count copies by BookStatus
+    public int countByStatus(BookStatus status) {
+        return (int) fileRepository.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .filter(c -> c.getStatus() == status)
+                .count();
     }
 
     // ========================
@@ -78,6 +92,6 @@ public class BookCopyRepository {
 
     private String toRow(BookCopy c) {
         return c.getId() + "|" + c.getBookId() + "|" +
-               c.getBarcode() + "|" + c.getStatus();
+                c.getBarcode() + "|" + c.getStatus();
     }
 }
