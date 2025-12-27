@@ -47,6 +47,17 @@ public class StudentRepository {
         return null;
     }
 
+    public Student findByUserId(String userId) {
+
+        for (String row : fileRepository.readAll(FILE_PATH)) {
+            Student s = map(row);
+            if (s.getUserId().equalsIgnoreCase(userId)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
     public List<Student> search(String field, String keyword, int page, int size) {
 
         List<Student> matched = filter(field, keyword);
@@ -92,8 +103,8 @@ public class StudentRepository {
 
         Student s = new Student();
         s.setId(p[0]);
-        s.setStudentID(p[1]);
-        s.setName(p[2]);
+        s.setUserId(p[1]);
+        s.setStudentID(p[2]);
         s.setDepartment(p[3]);
         s.setEmail(p[4]);
 

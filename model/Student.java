@@ -4,6 +4,7 @@ import model.enums.Role;
 
 public class Student extends User {
 
+    private String userId;
     private String studentID;
     private String department;
     private String email;
@@ -19,6 +20,13 @@ public class Student extends User {
         this.department = department;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getStudentID() {
         return studentID;

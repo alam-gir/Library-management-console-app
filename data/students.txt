@@ -1,6 +1,6 @@
-id|studentID|name|department|email
-S1|2023CSE045|Atik|CSE|atik@uni.edu
-S2|2023CSE046|Mizan|CSE|mizan@uni.edu
-S3|2023CSE047|Rafi|CSE|rafi@uni.edu
-S4|2023EEE012|Tanvir|EEE|tanvir@uni.edu
-S5|2023EEE015|Imran|EEE|imran@uni.edu
+id|userId|studentID|department|email
+S1|U1|2023CSE045|CSE|atik@uni.edu
+S2|U2|2023CSE046|CSE|mizan@uni.edu
+S3|U3|2023CSE047|CSE|rafi@uni.edu
+S4|U4|2023EEE012|EEE|tanvir@uni.edu
+S5|U5|2023EEE015|EEE|imran@uni.edu

@@ -43,20 +43,15 @@ public class UserService {
     // Load full student object by combining user and student data
     private Student loadStudent(User user) {
 
-        Student studentData = studentRepository.findById(user.getId());
+        Student student = studentRepository.findByUserId(user.getId());
 
-        if (studentData == null) {
+        if (student == null) {
             return null;
         }
 
-        Student student = new Student();
-        student.setId(user.getId());
         student.setName(user.getName());
         student.setPassword(user.getPassword());
-        student.setRole(Role.STUDENT);
-
-        student.setStudentID(studentData.getStudentID());
-        student.setDepartment(studentData.getDepartment());
+        student.setRole(user.getRole());
 
         return student;
     }
