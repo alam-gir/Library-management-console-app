@@ -1,7 +1,10 @@
-package util;
+package util.pagination;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import util.DisplayHelper;
+import util.InputHelper;
 
 public class MenuRenderer {
 

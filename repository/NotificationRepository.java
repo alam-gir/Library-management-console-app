@@ -3,7 +3,7 @@ package repository;
 import model.Notification;
 import model.enums.NotificationType;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NotificationRepository {
@@ -25,56 +25,52 @@ public class NotificationRepository {
     public void markRead(String id){
         Notification n = findById(id);
         if(n==null) return;
-
         n.setRead(true);
         fileRepo.updateById(FILE_PATH,id,toRecord(n));
     }
 
-    //================== PAGINATION ==================//
 
+    //================== PAGINATION (sorted newest first) ==================//
+
+    /** Get total student notifications count */
     public int countStudent(String userId){
-        return (int) fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        return (int) readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STUDENT &&
                              n.getUserId().equals(userId))
                 .count();
     }
 
+    /** Get paged notifications for student NEWEST FIRST */
     public List<Notification> pagedStudent(String userId,int page,int size){
-        int skip=(page-1)*size;
-
-        return fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        return readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STUDENT &&
                              n.getUserId().equals(userId))
-                .skip(skip)
+                .skip((page-1)*size)
                 .limit(size)
-                .collect(Collectors.toList());
+                .toList();
     }
 
+    /** Staff count (global) */
     public int countStaff(){
-        return (int) fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        return (int) readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STAFF)
                 .count();
     }
 
+    /** Staff paginated NEWEST FIRST */
     public List<Notification> pagedStaff(int page,int size){
-        int skip = (page-1)*size;
-
-        return fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        return readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STAFF)
-                .skip(skip)
+                .skip((page-1)*size)
                 .limit(size)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    //================== UNREAD COUNT ==================//
+
+    //================== UNREAD ==================//
 
     public int countUnreadStudent(String userId){
-        return (int) fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        return (int) readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STUDENT &&
                              n.getUserId().equals(userId) &&
                              !n.isRead())
@@ -82,34 +78,51 @@ public class NotificationRepository {
     }
 
     public int countUnreadStaff(){
-        return (int) fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        return (int) readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STAFF &&
                              !n.isRead())
                 .count();
     }
 
-    //================== MARK ALL ==================//
+
+    //================== MARK ALL READ ==================//
 
     public void markAllStudent(String userId){
-        List<Notification> list = pagedStudent(userId,1,9999);
-        list.forEach(n -> {
-            n.setRead(true);
-            fileRepo.updateById(FILE_PATH,n.getId(),toRecord(n));
-        });
+        readAllSorted().stream()
+                .filter(n -> n.getType()==NotificationType.STUDENT &&
+                             n.getUserId().equals(userId))
+                .forEach(n -> {
+                    n.setRead(true);
+                    fileRepo.updateById(FILE_PATH,n.getId(),toRecord(n));
+                });
     }
 
     public void markAllStaffRead(){
-        List<Notification> list = fileRepo.readAll(FILE_PATH).stream()
-                .map(this::map)
+        readAllSorted().stream()
                 .filter(n -> n.getType()==NotificationType.STAFF)
-                .collect(Collectors.toList());
-
-        list.forEach(n -> {
-            n.setRead(true);
-            fileRepo.updateById(FILE_PATH,n.getId(),toRecord(n));
-        });
+                .forEach(n -> {
+                    n.setRead(true);
+                    fileRepo.updateById(FILE_PATH,n.getId(),toRecord(n));
+                });
     }
+
+
+    //================== INTERNAL HELPERS ==================//
+
+    /** Read all notifications & sort newest first, unread prioritized */
+    private List<Notification> readAllSorted(){
+        return fileRepo.readAll(FILE_PATH).stream()
+                .map(this::map)
+                .sorted((a,b) -> {
+                    // unread first
+                    if(!a.isRead() && b.isRead()) return -1;
+                    if(a.isRead() && !b.isRead()) return 1;
+                    // then newest first
+                    return b.getCreatedAt().compareTo(a.getCreatedAt());
+                })
+                .toList();
+    }
+
 
     //================== Mapping ==================//
 
@@ -127,6 +140,6 @@ public class NotificationRepository {
 
     private String toRecord(Notification n){
         return n.getId()+"|"+n.getUserId()+"|"+n.getType()+"|"+
-               n.getMessage()+"|"+n.isRead()+"|"+n.getCreatedAt();
+                n.getMessage()+"|"+n.isRead()+"|"+n.getCreatedAt();
     }
 }
