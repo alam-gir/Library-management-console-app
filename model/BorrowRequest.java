@@ -10,6 +10,7 @@ public class BorrowRequest {
     private String copyId;
     private RequestStatus status;
     private LocalDate requestDate;
+    private LocalDate dueDate;
 
     public BorrowRequest() {}
 
@@ -61,4 +62,13 @@ public class BorrowRequest {
     public void setRequestDate(LocalDate requestDate) {
         this.requestDate = requestDate;
     }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
 }

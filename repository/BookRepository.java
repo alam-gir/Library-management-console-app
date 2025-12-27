@@ -31,6 +31,17 @@ public class BookRepository {
         return fileRepository.readAll(FILE_PATH).size();
     }
 
+    public List<Book> findAll() {
+
+        List<Book> books = new ArrayList<>();
+
+        for (String row : fileRepository.readAll(FILE_PATH)) {
+            books.add(map(row));
+        }
+
+        return books;
+    }
+
     public Book findById(String id) {
 
         String row = fileRepository.readById(FILE_PATH, id);

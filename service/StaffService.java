@@ -1,52 +1,86 @@
 package service;
 
 import model.BorrowRequest;
+import model.BookCopy;
 import model.enums.BookStatus;
+import model.enums.RequestStatus;
 import repository.BookCopyRepository;
 import repository.BorrowRequestRepository;
-import model.enums.RequestStatus;
 
-import java.util.List;
+import java.time.LocalDate;
 
 public class StaffService {
 
-    private final BorrowRequestRepository requestRepository;
-    private final BookCopyRepository bookCopyRepository;
+    private final BorrowRequestRepository requestRepo;
+    private final BookCopyRepository copyRepo;
+    private final NotificationService notify;
 
-    public StaffService() {
-        this.requestRepository = new BorrowRequestRepository();
-        this.bookCopyRepository = new BookCopyRepository();
+    public StaffService(){
+        this.requestRepo = new BorrowRequestRepository();
+        this.copyRepo = new BookCopyRepository();
+        this.notify = new NotificationService();
     }
 
-    // View all pending requests
-    public List<BorrowRequest> viewPendingRequests() {
-        return requestRepository.findPending();
+    public boolean approve(String requestId){
+
+        BorrowRequest r=requestRepo.findById(requestId);
+        if(r==null || r.getStatus()!= RequestStatus.PENDING) return false;
+
+        BookCopy cp=copyRepo.findById(r.getCopyId());
+        if(cp==null || cp.getStatus()!=BookStatus.AVAILABLE) return false;
+
+        cp.setStatus(BookStatus.READY_FOR_PICKUP);
+        copyRepo.update(cp);
+
+        r.setStatus(RequestStatus.APPROVED);
+        requestRepo.update(r);
+
+        notify.notifyUser(r.getStudentId(),"Request Approved — Collect from library.");
+        return true;
     }
 
-    // Approve borrow request
-    // public void approveRequest(String requestId) {
+    public boolean reject(String requestId){
+        BorrowRequest r=requestRepo.findById(requestId);
+        if(r==null || r.getStatus()!=RequestStatus.PENDING) return false;
 
-    //     BorrowRequest request = requestRepository.findById(requestId);
+        r.setStatus(RequestStatus.REJECTED);
+        requestRepo.update(r);
 
-    //     if (request == null) {
-    //         return;
-    //     }
+        notify.notifyUser(r.getStudentId(),"Your borrow request was rejected.");
+        return true;
+    }
 
-    //     bookCopyRepository.updateStatus(
-    //             request.getCopyId(),
-    //             BookStatus.READY_FOR_PICKUP
-    //     );
+    public boolean checkout(String requestId){
 
-    //     requestRepository.updateStatus(requestId, RequestStatus.APPROVED);
-    // }
+        BorrowRequest r=requestRepo.findById(requestId);
+        if(r==null || r.getStatus()!=RequestStatus.APPROVED) return false;
 
-    // // Mark book as borrowed when student picks it up
-    // public void checkoutBook(String copyId) {
-    //     bookCopyRepository.updateStatus(copyId, BookStatus.BORROWED);
-    // }
+        BookCopy cp=copyRepo.findById(r.getCopyId());
+        if(cp==null || cp.getStatus()!=BookStatus.READY_FOR_PICKUP) return false;
 
-    // // Return book
-    // public void returnBook(String copyId) {
-    //     bookCopyRepository.updateStatus(copyId, BookStatus.AVAILABLE);
-    // }
+        cp.setStatus(BookStatus.BORROWED);
+        copyRepo.update(cp);
+
+        r.setStatus(RequestStatus.CHECKED_OUT);
+        r.setDueDate(LocalDate.now().plusDays(14));
+        requestRepo.update(r);
+
+        notify.notifyUser(r.getStudentId(),"Book borrowed. Due date: "+r.getDueDate());
+        return true;
+    }
+
+    public boolean returnBook(String copyId){
+
+        BookCopy cp=copyRepo.findById(copyId);
+        if(cp==null || cp.getStatus()!=BookStatus.BORROWED) return false;
+
+        BorrowRequest r=requestRepo.findActiveByCopyId(copyId);
+        if(r==null) return false;
+
+        cp.setStatus(BookStatus.AVAILABLE);
+        copyRepo.update(cp);
+
+        notify.notifyUser(r.getStudentId(),"Book returned successfully.");
+        return true;
+    }
 }

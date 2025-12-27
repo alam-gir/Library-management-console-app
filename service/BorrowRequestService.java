@@ -23,6 +23,18 @@ public class BorrowRequestService {
         this.bookRepository = new BookRepository();
     }
 
+     public List<BorrowRequest> paged(RequestStatus status,int page,int size){
+        return requestRepository.findByStatusPaged(status,page,size);
+    }
+
+    public int count(RequestStatus status){
+        return requestRepository.countByStatus(status);
+    }
+
+    public BorrowRequest find(String id){ return requestRepository.findById(id); }
+
+    public BorrowRequest findActiveByCopyId(String copyId){ return requestRepository.findActiveByCopyId(copyId); }
+
     // Get active borrowed books for a student
     public List<BorrowedBookView> getBorrowedBooks(String studentId) {
 

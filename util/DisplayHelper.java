@@ -40,4 +40,28 @@ public class DisplayHelper {
     public static void emptyLine() {
         System.out.println();
     }
+
+    // 1) Basic → (bool, successMsg, failMsg)
+    public static void result(boolean ok, String success, String fail){
+        if(ok) success(success);
+        else   error(fail);
+    }
+
+    // 2) Result (bool) with default messages
+    public static void result(boolean ok){
+        if(ok) success("Operation successful");
+        else   error("Operation failed");
+    }
+
+    // 3) Custom result message only when success
+    public static void resultSuccess(boolean ok, String successMsg){
+        if(ok) success(successMsg);
+        else   error("Failed");
+    }
+
+    // 4) Custom result message only when failed
+    public static void resultFail(boolean ok, String failMsg){
+        if(!ok) error(failMsg);
+        else    success("Success");
+    }
 }

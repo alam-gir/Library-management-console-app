@@ -2,6 +2,7 @@ package repository;
 
 import model.BookCopy;
 import model.enums.BookStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,54 +15,56 @@ public class BookCopyRepository {
         this.fileRepository = new FileRepository();
     }
 
+    // Get all copies of a book
     public List<BookCopy> findByBookId(String bookId) {
-
-        List<BookCopy> copies = new ArrayList<>();
-
-        for (String row : fileRepository.readAll(FILE_PATH)) {
+        List<BookCopy> result = new ArrayList<>();
+        for(String row : fileRepository.readAll(FILE_PATH)) {
             BookCopy c = map(row);
-            if (c.getBookId().equals(bookId)) {
-                copies.add(c);
+            if(c.getBookId().equals(bookId)) {
+                result.add(c);
             }
         }
-
-        return copies;
+        return result;
     }
 
-    public BookCopy findById(String copyId) {
-
-        String row = fileRepository.readById(FILE_PATH, copyId);
-
-        if (row == null) {
-            return null;
-        }
-
-        return map(row);
-    }
-
+    // Count available copies only
     public int countAvailable(String bookId) {
-
         int count = 0;
-
-        for (BookCopy c : findByBookId(bookId)) {
-            if (c.getStatus() == BookStatus.AVAILABLE) {
-                count++;
-            }
+        for(BookCopy c : findByBookId(bookId)) {
+            if(c.getStatus() == BookStatus.AVAILABLE) count++;
         }
-
         return count;
     }
 
+    // ========================
+    // NEW -> find by ID
+    // ========================
+    public BookCopy findById(String copyId) {
+        String row = fileRepository.readById(FILE_PATH, copyId);
+        return row == null ? null : map(row);
+    }
+
+    // Save new copy
     public void save(BookCopy copy) {
         fileRepository.save(FILE_PATH, toRow(copy));
     }
 
+    // Delete copy
     public void delete(String copyId) {
         fileRepository.deleteById(FILE_PATH, copyId);
     }
 
-    private BookCopy map(String row) {
+    // ========================
+    // NEW -> update an existing record
+    // ========================
+    public void update(BookCopy copy) {
+        fileRepository.updateById(FILE_PATH, copy.getId(), toRow(copy));
+    }
 
+    // ------------------------
+    // Internal mapping helpers
+    // ------------------------
+    private BookCopy map(String row) {
         String[] p = row.split("\\|");
 
         BookCopy c = new BookCopy();
@@ -74,6 +77,7 @@ public class BookCopyRepository {
     }
 
     private String toRow(BookCopy c) {
-        return c.getId() + "|" + c.getBookId() + "|" + c.getBarcode() + "|" + c.getStatus();
+        return c.getId() + "|" + c.getBookId() + "|" +
+               c.getBarcode() + "|" + c.getStatus();
     }
 }

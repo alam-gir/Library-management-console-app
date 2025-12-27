@@ -1,4 +1,8 @@
 id|name|password|role
-U1|Alice Rahman|pass123|STUDENT
-U2|Bob Hasan|admin123|STAFF
-U3|Charlie Khan|stud456|STUDENT
+U1|Atik|pass1|STUDENT
+U2|Mizan|pass2|STUDENT
+U3|Rafi|pass3|STUDENT
+U4|Tanvir|pass4|STUDENT
+U5|Imran|pass5|STUDENT
+U6|Admin|admin123|STAFF
+U7|Librarian|lib123|STAFF
