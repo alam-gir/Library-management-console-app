@@ -35,7 +35,7 @@ public class StaffService {
         r.setStatus(RequestStatus.APPROVED);
         requestRepo.update(r);
 
-        notify.notifyUser(r.getStudentId(),"Request Approved — Collect from library.");
+        notify.notifyStudent(r.getStudentId(),"Request Approved — Collect from library.");
         return true;
     }
 
@@ -46,7 +46,7 @@ public class StaffService {
         r.setStatus(RequestStatus.REJECTED);
         requestRepo.update(r);
 
-        notify.notifyUser(r.getStudentId(),"Your borrow request was rejected.");
+        notify.notifyStudent(r.getStudentId(),"Your borrow request was rejected.");
         return true;
     }
 
@@ -65,7 +65,7 @@ public class StaffService {
         r.setDueDate(LocalDate.now().plusDays(14));
         requestRepo.update(r);
 
-        notify.notifyUser(r.getStudentId(),"Book borrowed. Due date: "+r.getDueDate());
+        notify.notifyStudent(r.getStudentId(),"Book borrowed. Due date: "+r.getDueDate());
         return true;
     }
 
@@ -80,7 +80,7 @@ public class StaffService {
         cp.setStatus(BookStatus.AVAILABLE);
         copyRepo.update(cp);
 
-        notify.notifyUser(r.getStudentId(),"Book returned successfully.");
+        notify.notifyStudent(r.getStudentId(),"Book returned successfully.");
         return true;
     }
 }

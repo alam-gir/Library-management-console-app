@@ -2,10 +2,13 @@ package model;
 
 import java.time.LocalDateTime;
 
+import model.enums.NotificationType;
+
 public class Notification {
 
     private String id;
     private String userId;
+    private NotificationType type;
     private String message;
     private boolean isRead;
     private LocalDateTime createdAt;
@@ -35,6 +38,14 @@ public class Notification {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+    
+    public NotificationType getType() {
+        return type;
     }
 
     public String getMessage() {

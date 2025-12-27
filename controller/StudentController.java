@@ -14,6 +14,8 @@ import util.ScreenUtil;
 
 import java.util.List;
 
+import controller.feature.notification.StudentNotificationFeature;
+
 public class StudentController {
 
     private final Student student;
@@ -38,14 +40,6 @@ public class StudentController {
             DisplayHelper.info("Name: " + student.getName());
             DisplayHelper.info("Department: " + student.getDepartment());
 
-            int unread = notificationService
-                    .getUserNotifications(student.getId())
-                    .stream()
-                    .filter(n -> !n.isRead())
-                    .toArray().length;
-
-            DisplayHelper.info("Unread Notifications: " + unread);
-            System.out.println();
 
             MenuRenderer.show(
                     "Student Menu",
@@ -60,88 +54,20 @@ public class StudentController {
 
             switch (choice) {
                 case 1:
-                    viewBooks();
+                    // viewBooks();
                     break;
                 case 2:
-                    requestBook();
+                    // requestBook();
                     break;
                 case 3:
-                    viewRequests();
+                    // viewRequests();
                     break;
                 case 4:
-                    viewNotifications();
+                    new StudentNotificationFeature(student.getId()).start();
                     break;
                 case 5:
                     return;
             }
         }
-    }
-
-    private void viewBooks() {
-
-        ScreenUtil.clear();
-        DisplayHelper.printSection("Books");
-
-        bookService.getBooks(1, 20).forEach(book ->
-                System.out.println(
-                        book.getId() + " | " +
-                        book.getTitle() + " | " +
-                        book.getAuthor()
-                )
-        );
-
-        ScreenUtil.pause();
-    }
-
-    private void requestBook() {
-
-        // ScreenUtil.clear();
-        // DisplayHelper.printSection("Request Book");
-
-        // String bookId = InputHelper.readString("Enter Book ID");
-
-        // boolean success = requestService.createRequest(student.getId(), bookId);
-
-        // if (success) {
-        //     DisplayHelper.success("Book request submitted");
-        // } else {
-        //     DisplayHelper.error("No available copy found");
-        // }
-
-        // ScreenUtil.pause();
-    }
-
-    private void viewRequests() {
-
-        // ScreenUtil.clear();
-        // DisplayHelper.printSection("My Requests");
-
-        // List<BorrowRequest> requests =
-        //         studentService.getMyRequests(student.getId());
-
-        // if (requests.isEmpty()) {
-        //     DisplayHelper.empty("No requests found");
-        // } else {
-        //     for (BorrowRequest r : requests) {
-        //         System.out.println(
-        //                 r.getId() + " | " +
-        //                 r.getCopyId() + " | " +
-        //                 r.getStatus()
-        //         );
-        //     }
-        // }
-
-        ScreenUtil.pause();
-    }
-
-    private void viewNotifications() {
-
-        ScreenUtil.clear();
-        DisplayHelper.printSection("Notifications");
-
-        notificationService.getUserNotifications(student.getId())
-                .forEach(n -> System.out.println("- " + n.getMessage()));
-
-        ScreenUtil.pause();
     }
 }

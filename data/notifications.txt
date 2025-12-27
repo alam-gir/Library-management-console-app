@@ -1,4 +1,7 @@
 id|userId|message|isRead|createdAt
-N1|U1|Your book request is pending|false|2025-01-10T10:15:00
-N2|U2|New borrow request received|false|2025-01-10T10:16:00
-N3|S1|Request Approved — Collect from library.|false|2025-12-27T15:37:36.225596
+N1|S1|STUDENT|Your request R11 is approved|false|2025-01-22T10:10
+N2|S3|STUDENT|Your request R08 is rejected|true|2025-01-21T15:45
+N3|*|STAFF|New borrow request received|true|2025-01-23T09:12
+N4|*|STAFF|4 pending requests|true|2025-01-22T14:30
+N5|S4|STUDENT|Book B2 is ready for pickup|false|2025-01-23T08:00
+N6|*|STAFF|Overdue return detected (Copy C29)|true|2025-01-23T11:20

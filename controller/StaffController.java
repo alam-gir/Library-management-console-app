@@ -8,6 +8,7 @@ import util.*;
 import controller.feature.checkout.ApproveRequestFeature;
 import controller.feature.checkout.CheckoutFeature;
 import controller.feature.checkout.ReturnFeature;
+import controller.feature.notification.StaffNotificationFeature;
 
 public class StaffController {
 
@@ -31,6 +32,11 @@ public class StaffController {
             DisplayHelper.info("Welcome, " + staff.getName());
             DisplayHelper.emptyLine();
 
+            int unreadCountNotification = notificationService.unreadForStaff();
+            String notificationMenuTitle = unreadCountNotification > 0 ?
+                    "Notifications (" + unreadCountNotification + ")" :
+                    "Notifications";
+
             MenuRenderer.show(
                     "Select Option",
                     "Approve Request",
@@ -38,7 +44,7 @@ public class StaffController {
                     "Return Book",
                     "Manage Books",
                     "Manage Students",
-                    "Notifications",
+                    notificationMenuTitle,
                     "Logout");
 
             int choice = InputHelper.readInt("Choose option", 1, 8);
@@ -60,31 +66,11 @@ public class StaffController {
                     studentManagementController.start();
                     break;
                 case 6:
-                    viewNotifications();
+                    new StaffNotificationFeature().start();
                     break;
                 case 7:
                     return;
             }
         }
-    }
-
-    private void viewNotifications() {
-
-        ScreenUtil.clear();
-        DisplayHelper.printSection("Notifications");
-
-        var notifications = notificationService.getUserNotifications(staff.getId());
-
-        if (notifications.isEmpty()) {
-            DisplayHelper.empty("No notifications");
-        } else {
-            TableRenderer.render(
-                    new String[] { "Message" },
-                    notifications.stream()
-                            .map(n -> new String[] { n.getMessage() })
-                            .toList());
-        }
-
-        ScreenUtil.pause();
     }
 }
