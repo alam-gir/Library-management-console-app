@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.List;
+
 import model.Staff;
 
 public class StaffRepository {
@@ -14,13 +16,17 @@ public class StaffRepository {
     // Find staff-specific data by user ID
     public Staff findByUserId(String userId) {
 
-        String row = fileRepository.readById(FILE_PATH, userId);
+        List<String> row = fileRepository.readAll(FILE_PATH);
+        
+        for (String r : row) {
+            String[] parts = r.split("\\|");
 
-        if (row == null) {
-            return null;
+            if (parts[1].equals(userId)) {
+                return mapToStaff(r);
+            }
         }
 
-        return mapToStaff(row);
+        return null;
     }
 
     // Convert file row to Staff object staff-only fields

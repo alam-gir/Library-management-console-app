@@ -1,10 +1,9 @@
-id|userId|message|isRead|createdAt
-N1|S1|Your book request R1 is active|true|2025-01-02T10:10
-N2|S2|Your request R2 is approved|false|2025-01-03T14:22
-N3|S4|Request R4 is pending approval|false|2025-01-18T09:30
-N4|S5|Your request R5 is approved!|true|2025-01-12T12:40
-N5|S6|Book issued under request R6|false|2025-01-14T11:15
-N6|S7|Request R7 has been rejected|true|2025-01-10T15:00
-N7|S10|Book borrowed under R10|false|2025-01-08T17:25
-N8|S12|Book checked out under R12|false|2025-01-11T16:10
-N9|U13|There are 3 pending requests|false|2025-01-20T13:00
+id|userId|type|message|isRead|createdAt
+N1|S1|STUDENT|Your book request R1 is active|true|2025-01-02T10:10
+N2|S2|STUDENT|Your request R2 is approved|false|2025-01-03T14:22
+N3|S4|STUDENT|Request R4 is pending approval|false|2025-01-18T09:30
+N4|S5|STUDENT|Your request R5 is approved|true|2025-01-12T12:40
+N5|S1|STUDENT|Book issued under request R1|false|2025-01-14T11:15
+N6|S2|STUDENT|Request R2 has been rejected|true|2025-01-10T15:00
+N7|U6|STAFF|3 new pending requests awaiting approval|true|2025-01-20T13:00
+N8|U6|STAFF|A book return is pending review|true|2025-01-21T09:15
