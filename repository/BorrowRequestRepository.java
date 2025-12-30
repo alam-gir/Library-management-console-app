@@ -103,9 +103,9 @@ public class BorrowRequestRepository {
 
     //================== ACTIVE REQUEST ==================//
 
-    public BorrowRequest findActiveByCopyId(String copyId) {
-        return findAll().stream()
-                .filter(r -> r.getCopyId().equals(copyId) &&
+    public BorrowRequest findActiveById(String requestId) {
+    return findAll().stream()
+                .filter(r -> r.getId().equals(requestId) &&
                         (r.getStatus() == RequestStatus.CHECKED_OUT ||
                          r.getStatus() == RequestStatus.APPROVED))
                 .findFirst()

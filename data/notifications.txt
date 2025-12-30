@@ -1,19 +1,10 @@
 id|userId|message|isRead|createdAt
-N1|S1|STUDENT|Your request R11 is approved|true|2025-01-22T10:10
-N2|S3|STUDENT|Your request R08 is rejected|true|2025-01-21T15:45
-N3|*|STAFF|New borrow request received|true|2025-01-23T09:12
-N4|*|STAFF|4 pending requests|true|2025-01-22T14:30
-N5|S4|STUDENT|Book B2 is ready for pickup|false|2025-01-23T08:00
-N6|*|STAFF|Overdue return detected (Copy C29)|true|2025-01-23T11:20
-X1|S1|STUDENT|No available copy for this book right now.|true|2025-12-27T22:16:45.983966400
-X2|*|STAFF|New borrow request from Student: S1 for BookID: B1|true|2025-12-27T22:39:34.816088200
-X3|S1|STUDENT|Borrow request submitted. Waiting approval.|true|2025-12-27T22:39:34.832653600
-X4|S1|STUDENT|Borrow request approved — Book is ready to collect.|true|2025-12-27T22:54:26.156067400
-X5|*|STAFF|Request X1 approved for student S1|true|2025-12-27T22:54:26.176090100
-X6|S1|STUDENT|Borrow request was rejected.|true|2025-12-27T23:31:27.328827400
-X7|S1|STUDENT|Book borrowed. Due date: 2026-01-10|true|2025-12-27T23:32:08.315173800
-X8|*|STAFF|New borrow request from Student: S1 for BookID: B13|true|2025-12-27T23:33:46.117756600
-X9|S1|STUDENT|Borrow request submitted. Waiting approval.|true|2025-12-27T23:33:46.130305500
-X10|S1|STUDENT|Book is ready to collect.|true|2025-12-27T23:34:44.786593800
-X11|*|STAFF|Request X2 approved for student S1|true|2025-12-27T23:34:44.810186600
-X12|S1|STUDENT|Book borrowed. Due date: 2026-01-10|true|2025-12-27T23:35:05.294166800
+N1|S1|Your book request R1 is active|true|2025-01-02T10:10
+N2|S2|Your request R2 is approved|false|2025-01-03T14:22
+N3|S4|Request R4 is pending approval|false|2025-01-18T09:30
+N4|S5|Your request R5 is approved!|true|2025-01-12T12:40
+N5|S6|Book issued under request R6|false|2025-01-14T11:15
+N6|S7|Request R7 has been rejected|true|2025-01-10T15:00
+N7|S10|Book borrowed under R10|false|2025-01-08T17:25
+N8|S12|Book checked out under R12|false|2025-01-11T16:10
+N9|U13|There are 3 pending requests|false|2025-01-20T13:00

@@ -4,12 +4,8 @@ import model.BorrowRequest;
 import model.enums.RequestStatus;
 import service.BorrowRequestService;
 import service.StaffService;
-import util.*;
-import util.pagination.MenuRenderer;
-import util.pagination.PaginationRenderer;
-import util.pagination.PaginationState;
-
-import java.util.List;
+import util.DisplayHelper;
+import util.pagination.PaginatedListView;
 
 public class ApproveRequestFeature {
 
@@ -18,56 +14,33 @@ public class ApproveRequestFeature {
 
     public void start() {
 
-        int page = 1, size = 5;
+        new PaginatedListView<BorrowRequest>()
+            .title("📄 Approve Borrow Requests")
+            .pageSize(6)
 
-        while (true) {
+            // fetch only pending
+            .fetch((page,size) -> reqService.paged(RequestStatus.PENDING,page,size))
+            .count(() -> reqService.count(RequestStatus.PENDING))
 
-            ScreenUtil.clear();
-            int total = reqService.count(RequestStatus.PENDING);
-            List<BorrowRequest> list = reqService.paged(RequestStatus.PENDING, page, size);
+            .columns("ReqID","Student Id","Copy Id","Date")
+            .map(r -> new String[]{
+                    r.getId(),
+                    r.getStudentId(),
+                    r.getCopyId(),
+                    r.getRequestDate().toString()
+            })
 
-            DisplayHelper.printSection("Approve Borrow Requests");
-            PaginationRenderer.render(new PaginationState(page, size, total));
+            .action("Approve", id -> {
+                boolean ok = staff.approve(id);
+                DisplayHelper.result(ok, "Approved Successfully!", "Approval Failed");
+            })
 
-            TableRenderer.render(new String[] { "ReqID", "Student", "Copy", "Date" },
-                    list.stream().map(r -> new String[] {
-                            r.getId(), r.getStudentId(), r.getCopyId(), r.getRequestDate().toString()
-                    }).toList());
+            .action("Reject", id -> {
+                boolean ok = staff.reject(id);
+                DisplayHelper.result(ok, "Request Rejected", "Reject Failed");
+            })
 
-            int op = MenuRenderer.dynamic("Options",
-                    page > 1 ? "Prev Page" : null,
-                    page * size < total ? "Next Page" : null,
-                    "Approve Request",
-                    "Reject Request",
-                    "Back");
-
-            int index = 1;
-
-            if (page > 1 && op == index++) {
-                page--;
-                continue;
-            }
-            if (page * size < total && op == index++) {
-                page++;
-                continue;
-            }
-
-            if (op == index++) {
-                String id = InputHelper.readString("Enter Request ID");
-                DisplayHelper.result(staff.approve(id), "Approved", "Failed");
-                ScreenUtil.pause();
-                continue;
-            }
-
-            if (op == index++) {
-                String id = InputHelper.readString("Enter Request ID");
-                DisplayHelper.result(staff.reject(id), "Rejected", "Failed");
-                ScreenUtil.pause();
-                continue;
-            }
-
-            return;
-        }
+            .back("Back")
+            .run();
     }
-
 }

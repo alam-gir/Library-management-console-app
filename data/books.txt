@@ -3,29 +3,29 @@ B1|9780135166307|Effective Java|Joshua Bloch
 B2|9780132350884|Clean Code|Robert C. Martin
 B3|9781491950357|Designing Data-Intensive Applications|Martin Kleppmann
 B4|9780596009205|Head First Java|Kathy Sierra
-B5|9780321356680|Java Concurrency in Practice|Brian Goetz
-B6|9780134685991|Core Java Volume I|Cay S. Horstmann
-B7|9781492078005|Modern Java in Action|Raoul-Gabriel Urma
-B8|9780596007126|Head First Design Patterns|Eric Freeman
-B9|9781617294945|Spring in Action|Craig Walls
-B10|9780134494166|Refactoring|Martin Fowler
-B11|9781491950357|Clean Architecture|Robert C. Martin
-B12|9788173666025|The C Programming Language|Dennis Ritchie
-B13|9780131103627|Algorithms|Robert Sedgewick
-B14|9780262033848|Introduction to Algorithms|Thomas H. Cormen
-B15|9780321573513|Operating System Concepts|Abraham Silberschatz
-B16|9789332549432|Computer Networks|Andrew S. Tanenbaum
-B17|9780201633610|Design Patterns|Erich Gamma
-B18|9789332518742|Database System Concepts|Silberschatz
-B19|9788131708415|Data Structures in Java|Y. Langsam
-B20|9789351197577|Python Crash Course|Eric Matthes
-B21|9781491946008|Fluent Python|Luciano Ramalho
-B22|9781449355739|Learning Python|Mark Lutz
-B23|9781492071266|System Design Interview|Alex Xu
-B24|9780596517747|JavaScript: The Good Parts|Douglas Crockford
-B25|9781491904243|You Don't Know JS|Kyle Simpson
-B26|9780596805523|Learning PHP, MySQL, JavaScript|Robin Nixon
-B27|9781491910398|Microservices Patterns|Chris Richardson
-B28|9781617294945|Kotlin in Action|Dmitry Jemerov
-B29|9781492037254|Machine Learning with Python|Andreas Muller
-B30|9781491973898|Deep Learning|Ian Goodfellow
+B5|9780134685991|Core Java Volume I|Cay S. Horstmann
+B6|9781617294945|Spring in Action|Craig Walls
+B7|9780321356680|Test Driven Development|Kent Beck
+B8|9780134494166|Java Concurrency in Practice|Brian Goetz
+B9|9781492045526|Kubernetes: Up and Running|Brendan Burns
+B10|9780134757599|Refactoring|Martin Fowler
+B11|9780596809485|Java Cookbook|Ian F. Darwin
+B12|9781491900864|Learning Python|Mark Lutz
+B13|9781449355739|Fluent Python|Luciano Ramalho
+B14|9780596007126|Head First Design Patterns|Eric Freeman
+B15|9780321146533|Patterns of Enterprise Application Architecture|Martin Fowler
+B16|9781492025795|Docker Deep Dive|Nigel Poulton
+B17|9780135974445|Algorithms|Sedgewick & Wayne
+B18|9780262033848|Introduction to Algorithms|CLRS
+B19|9781449311520|Regular Expressions Cookbook|Goyvaerts/Levithan
+B20|9781491973899|Hands-On Machine Learning|Aurélien Géron
+B21|9781786466229|Python Machine Learning|Sebastian Raschka
+B22|9780134093413|Computer Networks|Andrew S. Tanenbaum
+B23|9780262035613|Deep Learning|Goodfellow/Bengio/Courville
+B24|9781491904244|Designing Distributed Systems|Brendan Burns
+B25|9781617295188|Microservices in Action|Morgan Bruce
+B26|9781492055020|Cloud Native DevOps|Justin Garrison
+B27|9780128154809|Cybersecurity Essentials|Charles Brooks
+B28|9780135970065|Operating System Concepts|Silberschatz
+B29|9780137522750|Compilers: Principles, Techniques & Tools|Aho/Lam/Sethi/Ullman
+B30|9781491985570|Site Reliability Engineering|Betsy Beyer

@@ -4,7 +4,6 @@ import model.Notification;
 import model.enums.NotificationType;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class NotificationRepository {
 

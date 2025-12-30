@@ -4,58 +4,38 @@ import model.BorrowRequest;
 import model.enums.RequestStatus;
 import service.BorrowRequestService;
 import service.StaffService;
-import util.*;
-import util.pagination.MenuRenderer;
-import util.pagination.PaginationRenderer;
-import util.pagination.PaginationState;
-
-import java.util.List;
+import util.DisplayHelper;
+import util.pagination.PaginatedListView;
 
 public class CheckoutFeature {
 
     private final BorrowRequestService reqService = new BorrowRequestService();
     private final StaffService staff = new StaffService();
 
-    public void start(){
+    public void start() {
 
-        int page = 1, size = 5;
+        new PaginatedListView<BorrowRequest>()
+            .title("📦 Checkout Requests (Ready for Pickup)")
+            .pageSize(6)
 
-        while(true){
+            // Fetch approved requests only
+            .fetch((page,size) -> reqService.paged(RequestStatus.APPROVED,page,size))
+            .count(() -> reqService.count(RequestStatus.APPROVED))
 
-            ScreenUtil.clear();
-            int total = reqService.count(RequestStatus.APPROVED);
-            List<BorrowRequest> list = reqService.paged(RequestStatus.APPROVED,page,size);
+            .columns("ReqID","Student","Copy","Date")
+            .map(r -> new String[]{
+                    r.getId(),
+                    r.getStudentId(),
+                    r.getCopyId(),
+                    r.getRequestDate().toString()
+            })
 
-            DisplayHelper.printSection("Checkout Books");
-            PaginationRenderer.render(new PaginationState(page,size,total));
+            .action("Checkout", id -> {
+                boolean ok = staff.checkout(id);
+                DisplayHelper.result(ok,"Checkout Completed","Checkout Failed");
+            })
 
-            TableRenderer.render(
-                new String[]{"ReqID","Student","Copy","Request Date"},
-                list.stream().map(r -> new String[]{
-                    r.getId(),r.getStudentId(),r.getCopyId(),r.getRequestDate().toString()
-                }).toList()
-            );
-
-            int op = MenuRenderer.dynamic("Options",
-                    page>1 ? "Prev Page" : null,
-                    page*size<total ? "Next Page" : null,
-                    "Checkout",
-                    "Back"
-            );
-
-            int index = 1;
-
-            if(page > 1 && op == index++) { page--; continue; }
-            if(page*size < total && op == index++) { page++; continue; }
-
-            if(op == index++){
-                String reqId = InputHelper.readString("Enter Request ID to checkout");
-                DisplayHelper.result(staff.checkout(reqId), "Checkout Success", "Failed");
-                ScreenUtil.pause();
-                continue;
-            }
-
-            return; // Back
-        }
+            .back("Back")
+            .run();
     }
 }

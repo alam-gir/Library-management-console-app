@@ -31,7 +31,6 @@ public class AuthController {
 
             if (user == null) {
                 DisplayHelper.error("Invalid credentials");
-                ScreenUtil.pause();
                 continue;
             }
 

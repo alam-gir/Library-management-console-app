@@ -59,7 +59,6 @@ public class StudentController {
 
                 case 5 -> {
                     DisplayHelper.info("Logging out...");
-                    ScreenUtil.pause();
                     return;
                 }
             }

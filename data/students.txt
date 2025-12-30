@@ -4,3 +4,10 @@ S2|U2|2023CSE046|CSE|mizan@uni.edu
 S3|U3|2023CSE047|CSE|rafi@uni.edu
 S4|U4|2023EEE012|EEE|tanvir@uni.edu
 S5|U5|2023EEE015|EEE|imran@uni.edu
+S6|U6|2023CSE029|CSE|sadia@uni.edu
+S7|U7|2023EEE033|EEE|fahim@uni.edu
+S8|U8|2023CSE050|CSE|nusrat@uni.edu
+S9|U9|2023EEE041|EEE|hasib@uni.edu
+S10|U10|2023CSE044|CSE|reza@uni.edu
+S11|U11|2023CSE052|CSE|omar@uni.edu
+S12|U12|2023EEE053|EEE|lamia@uni.edu

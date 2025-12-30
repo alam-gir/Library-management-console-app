@@ -20,7 +20,6 @@ public class BookDetailsFeature {
         Book b = bookService.getBook(bookId);
         if (b == null) {
             DisplayHelper.error("Book not found");
-            ScreenUtil.pause();
             return;
         }
 

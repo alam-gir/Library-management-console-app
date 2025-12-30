@@ -4,5 +4,12 @@ U2|Mizan|pass2|STUDENT
 U3|Rafi|pass3|STUDENT
 U4|Tanvir|pass4|STUDENT
 U5|Imran|pass5|STUDENT
-U6|Admin|admin123|STAFF
-U7|Librarian|lib123|STAFF
+U6|Sadia|pass6|STUDENT
+U7|Fahim|pass7|STUDENT
+U8|Nusrat|pass8|STUDENT
+U9|Hasib|pass9|STUDENT
+U10|Reza|pass10|STUDENT
+U11|Omar|pass11|STUDENT
+U12|Lamia|pass12|STUDENT
+U13|Admin|admin123|STAFF
+U14|Librarian|lib123|STAFF

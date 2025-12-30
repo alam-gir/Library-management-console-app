@@ -18,7 +18,6 @@ public class StudentDetailsFeature {
 
         if (s == null) {
             DisplayHelper.error("Student not found");
-            ScreenUtil.pause();
             return;
         }
 

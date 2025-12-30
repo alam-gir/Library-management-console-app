@@ -3,7 +3,6 @@ package controller.feature.notification;
 import model.Notification;
 import service.NotificationService;
 import util.DisplayHelper;
-import util.ScreenUtil;
 import util.pagination.PaginatedListView;
 
 public class StaffNotificationFeature {
@@ -33,7 +32,6 @@ public class StaffNotificationFeature {
                 .action("Mark All as Read", () -> {
                     service.markAllStaff();
                     DisplayHelper.success("All staff notifications marked read!");
-                    ScreenUtil.pause();
                 })
                 .back("Back")
                 .run();

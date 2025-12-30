@@ -34,7 +34,7 @@ public class BorrowRequestService {
 
     public BorrowRequest find(String id){ return requestRepository.findById(id); }
 
-    public BorrowRequest findActiveByCopyId(String copyId){ return requestRepository.findActiveByCopyId(copyId); }
+    public BorrowRequest findActiveByCopyId(String copyId){ return requestRepository.findActiveById(copyId); }
 
     // Get active borrowed books for a student
     public List<BorrowedBookView> getBorrowedBooks(String studentId) {

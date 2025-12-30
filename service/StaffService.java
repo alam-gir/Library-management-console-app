@@ -78,18 +78,19 @@ public class StaffService {
         return true;
     }
 
-    public boolean returnBook(String copyId) {
-
-        BookCopy cp = copyRepo.findById(copyId);
-        if (cp == null || cp.getStatus() != BookStatus.BORROWED)
+    public boolean returnBook(String requestId) {
+        BorrowRequest r = requestRepo.findActiveById(requestId);
+        if (r == null)
             return false;
 
-        BorrowRequest r = requestRepo.findActiveByCopyId(copyId);
-        if (r == null)
+        BookCopy cp = copyRepo.findById(r.getCopyId());
+        if (cp == null || cp.getStatus() != BookStatus.BORROWED)
             return false;
 
         cp.setStatus(BookStatus.AVAILABLE);
         copyRepo.update(cp);
+        r.setStatus(RequestStatus.RETURNED);
+        requestRepo.update(r);
 
         notify.notifyStudent(r.getStudentId(), "Book returned successfully.");
         return true;

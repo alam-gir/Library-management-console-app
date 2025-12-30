@@ -36,7 +36,5 @@ public class StudentBorrowedBooksFeature {
                     }).toList()
             );
         }
-
-        ScreenUtil.pause();
     }
 }

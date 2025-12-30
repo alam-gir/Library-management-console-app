@@ -42,7 +42,6 @@ public class BookExploreFeature {
                 .action("Request Borrow", id -> {
                     boolean ok = reqService.requestBorrow(student.getId(), id);
                     DisplayHelper.result(ok,"Request Sent","Failed or unavailable");
-                    ScreenUtil.pause();
                 })
 
                 .back("Back")

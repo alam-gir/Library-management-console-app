@@ -130,7 +130,6 @@ public class PaginatedListView<T> {
                 tasks.add(() -> {
                     String id = InputHelper.readString("Enter ID");
                     fn.accept(id);
-                    ScreenUtil.pause();
                 });
             });
 
@@ -138,7 +137,6 @@ public class PaginatedListView<T> {
                 labels.add(txt);
                 tasks.add(() -> {
                     fn.run();
-                    ScreenUtil.pause();
                 });
             });
         }

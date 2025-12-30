@@ -3,7 +3,6 @@ package controller.feature.notification;
 import model.Notification;
 import service.NotificationService;
 import util.DisplayHelper;
-import util.ScreenUtil;
 import util.pagination.PaginatedListView;
 
 public class StudentNotificationFeature {
@@ -38,7 +37,6 @@ public class StudentNotificationFeature {
                 .action("Mark All as Read", () -> {
                     service.markAllStudent(studentId);
                     DisplayHelper.success("All notifications marked as read!");
-                    ScreenUtil.pause();
                 })
                 .back("Back")
                 .run();

@@ -35,7 +35,5 @@ public class StudentBorrowRequestsFeature {
                     }).toList()
             );
         }
-
-        ScreenUtil.pause();
     }
 }
